@@ -1,0 +1,42 @@
+.tableStyle{
+    border: none;
+    border-collapse: collapse; 
+    border-spacing: 0;
+}
+
+td, th{
+    display: table-cell;
+}
+
+tr:nth-child(even){background-color: #f2f2f2}
+
+.titleCol{
+    width: 200px; 
+}
+
+.lengthCol{
+    width: 75px;
+}
+
+.surfaceCol{
+    width: 100px;
+}
+
+.descriptionCol{
+    width: 250px;
+}
+
+.table-text-top > td{
+    vertical-align: text-top;
+    padding: 10px 0px;
+}
+
+.table-text-bottom > th{
+    vertical-align: text-bottom;
+    text-align: left;
+}
+
+.useTypeCol{
+    width: 24px;
+    text-align: center;
+}

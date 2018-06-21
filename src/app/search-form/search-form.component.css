@@ -1,0 +1,36 @@
+.main{
+    width:900px;
+}
+
+.flexColumn{
+    display: flex;
+    flex-direction: column;   
+}
+
+.flexRow{
+    display: flex;
+    justify-content: center;
+}
+
+
+.center {
+    /* justify-content: center; */
+}
+
+
+.rowElem{
+    width: 430px;
+    margin: 4px;
+    padding: 5px;
+    border: 2px solid rgb(196, 196, 134) ;
+    border-radius: 15px;
+}
+
+.marAuto{
+    display: block;
+    margin: auto;
+}
+
+.paddin{
+    padding: 5px;
+}
