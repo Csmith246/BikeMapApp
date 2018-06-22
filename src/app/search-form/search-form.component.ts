@@ -105,7 +105,8 @@ export class SearchFormComponent implements OnInit {
     esriLoader.loadModules(['esri/tasks/QueryTask', 'esri/config', 'esri/geometry/geometryEngine', "esri/tasks/support/Query"])
       .then(([QueryTask, esriConfig, geoEngine, Query]) => {
         //esriConfig.request.corsEnabledServers.push("https://gistest3.dot.ny.gov");
-
+        // esriConfig.request.proxyUrl = "https://gistest3.dot.ny.gov/CSmith/DotNetProxy/proxy.ashx";
+        // esriConfig.request.forceProxy = true;
 
         let countyTask = new QueryTask({ url: this.countyService });
         let countyQuery: Object = {

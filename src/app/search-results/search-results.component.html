@@ -1,45 +1,67 @@
 <div id="searchResults" *ngIf="results.length !== 0">
-  <h1>Search Results</h1>
-  <table class="tableStyle">
-    <tr class="table-text-bottom">
-      <th>Trail</th>
-      <th>Length</th>
-      <th>Surface Type</th>
-      <th>Description</th>
-      <th><img src="../../assets/walking-head.jpg" alt=""></th>
-      <th><img src="../../assets/biking-head.jpg" alt=""></th>
-      <th><img src="../../assets/skating-head.jpg" alt=""></th>
-      <th><img src="../../assets/atv-head.jpg" alt=""></th>
-      <th><img src="../../assets/horse-head.jpg" alt=""></th>
-      <th><img src="../../assets/ski-head.jpg" alt=""></th>
-      <th><img src="../../assets/snow-head.jpg" alt=""></th>
-    </tr>
-    <tr class="table-text-top" *ngFor="let result of results">
-      <td class="titleCol">{{result.attributes["TRAIL_NAME"]}} <img src="../../assets/smallNYSIcon.gif" alt="" /></td>
-      <td class="lengthCol">{{result.attributes["TRAILLENGTH"]}} Miles</td>
-      <td class="surfaceCol">{{result.attributes["SURFACE_TYPE"]}}</td>
-      <td class="descriptionCol">{{result.attributes["TRAIL_DESC"]}}</td>
-      <td class="useTypeCol">
-        <img *ngIf="result.attributes['WALKING'] !== null" src="../../assets/walk-icon.png" width="20px" height="20px">
-      </td>
-      <td class="useTypeCol">
-        <img *ngIf="result.attributes['BIKING'] !== null" src="../../assets/bike-icon.png" width="20px" height="20px">
-      </td>
-      <td class="useTypeCol">
-        <img *ngIf="result.attributes['SKATING'] !== null" src="../../assets/skate-icon.png" width="20px" height="20px">
-      </td>
-      <td class="useTypeCol">
-        <img *ngIf="result.attributes['ATV'] !== null" src="../../assets/atv-icon.png" width="20px" height="20px">
-      </td>
-      <td class="useTypeCol">
-        <img *ngIf="result.attributes['HORSERIDING'] !== null" src="../../assets/horse-icon.png" width="20px" height="20px">
-      </td>
-      <td class="useTypeCol">
-        <img *ngIf="result.attributes['SKIING'] !== null" src="../../assets/ski-icon.png" width="20px" height="20px">
-      </td>
-      <td class="useTypeCol">
-        <img *ngIf="result.attributes['SNOWMOBILE'] !== null" src="../../assets/snow-mobile-icon.png" width="20px" height="20px">
-      </td>
-    </tr>
-  </table>
+  <div id="sizer">
+    <h2 id="searchHeader">Search Results</h2>
+    <table class="tableStyle">
+      <tr class="table-text-bottom">
+        <th>Trail</th>
+        <th>Length</th>
+        <th>Surface Type</th>
+        <th>Description</th>
+        <th>
+          <img src="../../assets/walking-head.jpg" alt="">
+        </th>
+        <th>
+          <img src="../../assets/biking-head.jpg" alt="">
+        </th>
+        <th>
+          <img src="../../assets/skating-head.jpg" alt="">
+        </th>
+        <th>
+          <img src="../../assets/atv-head.jpg" alt="">
+        </th>
+        <th>
+          <img src="../../assets/horse-head.jpg" alt="">
+        </th>
+        <th>
+          <img src="../../assets/ski-head.jpg" alt="">
+        </th>
+        <th>
+          <img src="../../assets/snow-head.jpg" alt="">
+        </th>
+      </tr>
+      <tr class="table-text-top" *ngFor="let result of results">
+        <td class="titleCol">
+          <a href="https://www.dot.ny.gov/portal/pls/portal/MEXIS_APP.DYN_BIKE_TRAIL_DETAIL_MAIN.show?p_arg_names=p_trail_id&p_arg_values={{result.attributes['TRAIL_ID']}}"
+            target="_blank">
+            {{result.attributes["TRAIL_NAME"]}}
+          </a>
+          <img src="../../assets/smallNYSIcon.gif" alt="" />
+        </td>
+        <td class="lengthCol">{{result.attributes["TRAILLENGTH"]}} Miles</td>
+        <td class="surfaceCol">{{result.attributes["SURFACE_TYPE"]}}</td>
+        <td class="descriptionCol">{{result.attributes["TRAIL_DESC"]}}</td>
+        <td class="useTypeCol">
+          <img *ngIf="result.attributes['WALKING'] !== null" src="../../assets/walk-icon.png" width="20px" height="20px">
+        </td>
+        <td class="useTypeCol">
+          <img *ngIf="result.attributes['BIKING'] !== null" src="../../assets/bike-icon.png" width="20px" height="20px">
+        </td>
+        <td class="useTypeCol">
+          <img *ngIf="result.attributes['SKATING'] !== null" src="../../assets/skate-icon.png" width="20px" height="20px">
+        </td>
+        <td class="useTypeCol">
+          <img *ngIf="result.attributes['ATV'] !== null" src="../../assets/atv-icon.png" width="20px" height="20px">
+        </td>
+        <td class="useTypeCol">
+          <img *ngIf="result.attributes['HORSERIDING'] !== null" src="../../assets/horse-icon.png" width="20px" height="20px">
+        </td>
+        <td class="useTypeCol">
+          <img *ngIf="result.attributes['SKIING'] !== null" src="../../assets/ski-icon.png" width="20px" height="20px">
+        </td>
+        <td class="useTypeCol">
+          <img *ngIf="result.attributes['SNOWMOBILE'] !== null" src="../../assets/snow-mobile-icon.png" width="20px" height="20px">
+        </td>
+      </tr>
+    </table>
+  </div>
 </div>
