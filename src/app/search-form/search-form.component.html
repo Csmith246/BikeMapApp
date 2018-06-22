@@ -3,7 +3,7 @@
     <div id="1stCol" class="flexColumn rowElem">
       <div>
         <label for="regions">NYSDOT Region:</label>
-        <select [(ngModel)]="selectedRegion" name="regions" id="regionSelect">
+        <select [(ngModel)]="selectedRegion" name="regions" id="regionSelect" (change)="onRegionChange()">
           <option value="All" selected>All</option>
           <option *ngFor="let region of regions" value={{region.name}}>{{region.name}}</option>
         </select>
@@ -11,7 +11,7 @@
 
       <div>
         <label for="county">County:</label>
-        <select [(ngModel)]="selectedCounty" name="county" id="countySelect">
+        <select [(ngModel)]="selectedCounty" name="county" id="countySelect" (change)="onCountyChange()">
           <option value="All" selected>All</option>
           <option *ngFor="let county of counties" value={{county.name}}>{{county.name}}</option>
         </select>

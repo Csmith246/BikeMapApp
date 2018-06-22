@@ -1,6 +1,9 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
+import { County } from './county';
+import { Region } from './region';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -42,7 +45,7 @@ export class DataService {
   }
 
   region_county_mapping = {
-    "Capital District" : ["Albany", "Columbia", "Greene", "Rensselaer", "Saratoga", "Schenectady", "Warren", "Washington"],
+    "Capital Region" : ["Albany", "Columbia", "Greene", "Rensselaer", "Saratoga", "Schenectady", "Warren", "Washington"],
     "Mohawk Valley" : ["Fulton", "Herkimer", "Montgomery", "Oneida", "Otsego", "Schoharie"],
     "Central NY": ["Cayuga", "Cortland", "Onondaga", "Oswego", "Madison"],
     "Finger Lakes": ["Genesee", "Livingston", "Monroe", "Ontario", "Orleans", "Seneca", "Yates", "Wayne", "Wyoming"],

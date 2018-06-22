@@ -16,13 +16,17 @@ import { DataService } from '../data.service';
 })
 export class SearchFormComponent implements OnInit {
 
+
   regions: Region[] = [];
   counties: County[] = [];
+  allRegions: Region[];
+  allCounties: County[];
   selectedRegion: String = 'All';
   selectedCounty: String = 'All';
 
   countyService: String = 'https://gisservices.its.ny.gov/arcgis/rest/services/NYS_Civil_Boundaries/FeatureServer/3';
   regionService: String = 'https://gistest3.dot.ny.gov/arcgis/rest/services/BroadbandAvailability_REDC/MapServer/0';
+  bikeService: String = 'https://gistest3.dot.ny.gov/arcgis/rest/services/Portal_NYSBikeMap/MapServer/8';
 
   isPaved: Boolean = false;
   isGravel: Boolean = false;
@@ -41,7 +45,7 @@ export class SearchFormComponent implements OnInit {
   constructor(
     private dataService: DataService
   ) {
-    
+
   }
 
   ngOnInit() {
@@ -59,11 +63,11 @@ export class SearchFormComponent implements OnInit {
         countyTask.execute(countyQuery)
           .then(res => {
             console.log(res);
-            let countiesArr: County[] = res.features.map(resItem => {
+            this.counties = res.features.map(resItem => {
               return { name: resItem.attributes.NAME };
             });
 
-            countiesArr.sort((a: County, b: County) => {
+            this.counties.sort((a: County, b: County) => {
               if (a.name < b.name)
                 return -1;
               if (a.name > b.name)
@@ -71,7 +75,7 @@ export class SearchFormComponent implements OnInit {
               return 0;
             });
 
-            this.counties = countiesArr;
+            this.allCounties = this.counties; // Store full county data
 
           }).catch(err => console.log(err));
 
@@ -93,6 +97,9 @@ export class SearchFormComponent implements OnInit {
                 return 1;
               return 0;
             });
+
+            this.allRegions = this.regions; // Store full region data
+
           }).catch(err => console.log(err));
 
       }).catch(err => {
@@ -100,7 +107,7 @@ export class SearchFormComponent implements OnInit {
       });
   }
 
-  search(){
+  search() {
     console.log("in Search");
     esriLoader.loadModules(['esri/tasks/QueryTask', 'esri/config', 'esri/geometry/geometryEngine', "esri/tasks/support/Query"])
       .then(([QueryTask, esriConfig, geoEngine, Query]) => {
@@ -118,7 +125,7 @@ export class SearchFormComponent implements OnInit {
           .then(countyRes => {
             console.log('COUNTY GEOM', countyRes);
             let countyGeom = geoEngine.generalize(countyRes.features["0"].geometry, 10000, true, "feet");
-            let bikeTask = new QueryTask({ url: "https://gistest3.dot.ny.gov/arcgis/rest/services/Portal_NYSBikeMap/MapServer/8" });
+            let bikeTask = new QueryTask({ url: this.bikeService });
             let bikeQuery = {
               outFields: ['*'],
               geometry: countyGeom,
@@ -134,6 +141,33 @@ export class SearchFormComponent implements OnInit {
           }).catch(err => console.log(err));
 
       });
+  }
+
+
+  onRegionChange() {
+    if (this.selectedRegion === "All") {
+      this.counties = this.allCounties;
+    } else {
+      let countiesForRegion: String[] = this.dataService.getCountiesForRegion(this.selectedRegion).sort();
+
+      if(countiesForRegion.indexOf(this.selectedCounty) === -1){ // Check to see if currently selected county is in new county options
+        this.selectedCounty = 'All';
+      }
+
+      let countiesForRegionProper: County[] = countiesForRegion.map((county) => {
+        return new County(county);
+      });
+      this.counties = countiesForRegionProper;
+      
+    }
+  }
+
+
+  onCountyChange() {
+    if (this.counties.length === this.allCounties.length && this.selectedCounty!=='All') {
+      this.selectedRegion = this.dataService.getRegionForCounty(this.selectedCounty);
+      this.onRegionChange();
+    }
   }
 
 }
