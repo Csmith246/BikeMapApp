@@ -1,1 +1,16 @@
-<div style="width:900px; height: 700px;" id="viewDiv"></div>
+<div style="width:900px; height: 700px;" id="viewDiv">
+    <div class="onScreenAccord">
+
+        <div class="widgetElem" *ngFor="let accordElem of accordionData; let i = index">
+            <button class="accordion" (click)="setActiveAccord(i)" [class.active]="accordianSelectedIndex === i"><img class="imgCorrection" src="{{accordElem.imgSrc}}" alt="" width="20px" height="20px"></button>
+            <div class="panel" id="{{accordElem.id}}" [class.show]="accordianSelectedIndex === i">
+                <div id="basemap-title" *ngIf="accordElem.id === 'basemapWid'">Basemap Gallery</div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- <div class="basemapWid" #basemapWid></div> -->
+
+<div id="widgetDiv"></div>
