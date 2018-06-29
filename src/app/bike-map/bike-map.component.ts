@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import esriLoader from 'esri-loader';
+import { TabNavigationService } from '../tab-navigation.service';
 
 @Component({
   selector: 'bike-map',
@@ -11,8 +12,8 @@ export class BikeMapComponent implements OnInit {
   // @ViewChild('legendWidgetDiv') legendWidgetDiv;
   // @ViewChild('basemapWid') basemapWid;
 
-  zeeMapYo;
-  myView;
+  bikeService: String = 'https://gistest3.dot.ny.gov/arcgis/rest/services/Portal_NYSBikeMap/MapServer/8';
+
 
   accordionData = [{
     title: "Legend",
@@ -26,7 +27,7 @@ export class BikeMapComponent implements OnInit {
 
   accordianSelectedIndex: number;
 
-  constructor() { }
+  constructor(private tabNavigationService: TabNavigationService) { }
 
 
   ngAfterViewInit() {
@@ -41,8 +42,8 @@ export class BikeMapComponent implements OnInit {
     // first, we use Dojo's loader to require the map class
     esriLoader.loadModules(["esri/config", 'esri/WebMap', 'esri/views/MapView',
       "esri/widgets/Legend", "esri/widgets/BasemapGallery", "esri/widgets/Search",
-      "esri/tasks/Locator", 'dojo/domReady!']) // , '../HelloWorldWidget/app/HelloWorld.js'
-      .then(([esriConfig, WebMap, MapView, Legend, BasemapGallery, Search, Locator]) => { //, HelloWorld
+      "esri/tasks/Locator", 'esri/tasks/QueryTask', 'esri/layers/FeatureLayer', 'dojo/domReady!']) // , '../HelloWorldWidget/app/HelloWorld.js'
+      .then(([esriConfig, WebMap, MapView, Legend, BasemapGallery, Search, Locator, QueryTask, FeatureLayer]) => { //, HelloWorld
         esriConfig.portalUrl = "https://nysdot.maps.arcgis.com";
         console.log("In Promise then");
 
@@ -53,7 +54,8 @@ export class BikeMapComponent implements OnInit {
           }
         });
 
-        this.zeeMapYo = webMap;
+        console.log(webMap);
+
 
         // and we show that map in a container w/ id #viewDiv
         var view = new MapView({
@@ -63,7 +65,7 @@ export class BikeMapComponent implements OnInit {
 
         view.ui.move("zoom", "bottom-right");
 
-        this.myView = view;
+
 
         // var basemapGallery = new BasemapGallery({
         //   container: this.onScreenDiv.nativeElement
@@ -98,7 +100,7 @@ export class BikeMapComponent implements OnInit {
           maxSuggestions: 6,
           suggestionsEnabled: true,
           minSuggestCharacters: 0
-        },{
+        }, {
           locator: new Locator({ url: "https://gisservices.its.ny.gov/arcgis/rest/services/Locators/NYPlace/GeocodeServer" }),
           singleLineFieldName: "SingleLineFieldName",
           name: "NYS Place Locator",
@@ -141,6 +143,89 @@ export class BikeMapComponent implements OnInit {
           view: view,
           container: 'basemapWid'
         });
+
+
+        // view.when(() => {
+        // console.log("FULL WEBMAP?", webMap);
+        // console.log(webMap.layers.items);
+
+        // var bikeMapLyrs = webMap.layers.items.filter((lyr) => {
+        //   // console.log(lyr);
+        //   if (lyr.id.indexOf("BikeMap") !== -1) {
+        //     return true;
+        //   }
+        //   return false;
+        // });
+        // console.log(bikeMapLyrs);
+        // var bikeRouteSubLyrs = bikeMapLyrs[0].sublayers.items.filter(sublyr => {
+        //   if (sublyr.id === 8) {
+        //     return true;
+        //   }
+        //   return false;
+        // });
+        // console.log(bikeRouteSubLyrs);
+
+        // var bikeRouteLyr = bikeRouteSubLyrs[0];
+
+        // console.log("REEEEEEE", bikeRouteLyr);
+
+        // });
+
+
+        var savedLyr = null;
+        this.tabNavigationService.currentTrailName.subscribe((trailName) => {
+          if(savedLyr){
+            webMap.remove(savedLyr);
+          }
+
+          console.log(trailName, "IN BIKE MAPPPP");
+          if (trailName !== "") {
+            let queryTask = QueryTask(this.bikeService);
+            console.log("in good val for trailname");
+            queryTask.execute({
+              where: `TRAIL_NAME='${trailName}'`,
+              returnGeometry: true,
+              outFields: ["*"]
+            }).then(res => {
+              console.log(res);
+              var selectedLyr = new FeatureLayer({
+                source: res.features,
+                geometryType: "polyline",
+                objectIdField: "ObjectID",
+                fields: res.fields,
+                spatialReference: res.spatialReference,
+                legendEnabled: false,
+                renderer: {
+                  type: "simple",  // autocasts as new SimpleRenderer()
+                  symbol: {
+                    type: "simple-line",  // autocasts as new SimpleMarkerSymbol()
+                    width: "5px",
+                    color: "#38e7ff"
+                  }
+                }
+              });
+
+              webMap.add(selectedLyr);
+              savedLyr = selectedLyr;
+
+              console.log(webMap);
+
+              view.whenLayerView(selectedLyr).then(function(lyrView){
+                lyrView.watch("updating", function(val){
+                  if(!val){  // wait for the layer view to finish updating
+                    lyrView.queryExtent().then(function(results){
+                      view.goTo(results.extent);  // go to the extent of all the graphics in the layer view
+                    });
+                  }
+                });
+              });
+            });
+          }
+        });
+
+
+
+
 
       })
       .catch(err => {

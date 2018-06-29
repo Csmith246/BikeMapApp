@@ -1,13 +1,16 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {MatTabsModule} from '@angular/material/tabs';
 
 import { AppComponent } from './app.component';
 import { BikeMapComponent } from './bike-map/bike-map.component';
 import { SearchComponent } from './search/search.component';
 import { SearchFormComponent } from './search-form/search-form.component';
 import { SearchResultsComponent } from './search-results/search-results.component';
+import { TabsComponent } from './tabs/tabs.component';
 
 @NgModule({
   declarations: [
@@ -15,12 +18,14 @@ import { SearchResultsComponent } from './search-results/search-results.componen
     BikeMapComponent,
     SearchComponent,
     SearchFormComponent,
-    SearchResultsComponent
+    SearchResultsComponent,
+    TabsComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
-    CommonModule
+    BrowserAnimationsModule,
+    MatTabsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

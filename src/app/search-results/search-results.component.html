@@ -35,7 +35,7 @@
             target="_blank">
             {{result.attributes["TRAIL_NAME"]}}
           </a>
-          <img src="../../assets/smallNYSIcon.gif" alt="" />
+          <img (click)="highlightTrail(result.attributes['TRAIL_NAME'])" src="../../assets/smallNYSIcon.gif" alt="" />
         </td>
         <td class="lengthCol">{{result.attributes["TRAILLENGTH"]}} Miles</td>
         <td class="surfaceCol">{{result.attributes["SURFACE_TYPE"]}}</td>
