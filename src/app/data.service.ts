@@ -12,7 +12,16 @@ export class DataService {
   private searchResultsSource = new BehaviorSubject([]);
   currentSearchResults = this.searchResultsSource.asObservable();
 
+  private searchDataSource = new BehaviorSubject({});
+  currentSearchData = this.searchDataSource.asObservable();
+
+
   constructor() { }
+
+
+  setSearchData(data){
+    this.searchDataSource.next(data);
+  }
 
   setSearchResults(res){
     // Process results first to handle duplicates and sort
@@ -24,6 +33,10 @@ export class DataService {
     });
     // broadcast results
     this.searchResultsSource.next(resFinal);
+  }
+
+  setNullResult(){
+    this.searchResultsSource.next(null);
   }
 
   _removeDuplicates(res){

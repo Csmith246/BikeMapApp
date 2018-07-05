@@ -1,6 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import esriLoader from 'esri-loader';
+import {MatCheckboxModule} from '@angular/material/checkbox';
+import {MatSelectModule} from '@angular/material/select';
+import {MatInputModule} from '@angular/material/input';
+import {MatFormFieldModule} from '@angular/material/form-field';
+
 
 // Class Imports
 import { County } from '../county';
@@ -45,6 +50,8 @@ export class SearchFormComponent implements OnInit {
 
   trailName: String = '';
 
+  searching: Boolean = false;
+
   constructor(
     private dataService: DataService
   ) {
@@ -65,7 +72,7 @@ export class SearchFormComponent implements OnInit {
         };
         countyTask.execute(countyQuery)
           .then(res => {
-            console.log(res);
+            // console.log(res);
             this.counties = res.features.map(resItem => {
               return { name: resItem.attributes.NAME };
             });
@@ -89,7 +96,7 @@ export class SearchFormComponent implements OnInit {
         };
         regionTask.execute(regionQuery)
           .then(res => {
-            console.log(res);
+            // console.log(res);
             this.regions = res.features.map(resItem => {
               return { name: resItem.attributes.DED_REGION };
             });
@@ -118,13 +125,18 @@ export class SearchFormComponent implements OnInit {
         // esriConfig.request.proxyUrl = "https://gistest3.dot.ny.gov/CSmith/DotNetProxy/proxy.ashx";
         // esriConfig.request.forceProxy = true;
 
+        this.searching = true; // display searching gif
+        this.dataService.setSearchResults([]); // causes previous results to go away
+        this.dataService.setSearchData({"region" : this.selectedRegion, "county" : this.selectedCounty}); // pass search info to the data service
+
         let queryTask; //= new QueryTask({ url: this.countyService });
         let query;
 
         let baseWhereClause: String = this.buildWhereQuery();
 
+        
 
-        console.log("in Search");
+        // console.log("in Search");
         if (this.selectedCounty !== 'All') {
           queryTask = new QueryTask({ url: this.countyService });
           query = {
@@ -150,7 +162,7 @@ export class SearchFormComponent implements OnInit {
         
         queryTask.execute(query)
           .then(res => {
-            console.log('GEOM', res);
+            // console.log('GEOM', res);
             console.log('In Promise', baseWhereClause);
             let geom = res.features["0"].geometry.extent;//geoEngine.generalize(res.features["0"].geometry, 1000000000, true, "feet");
             let bikeTask = new QueryTask({ url: this.bikeService });
@@ -163,9 +175,14 @@ export class SearchFormComponent implements OnInit {
             }
             bikeTask.execute(bikeQuery)
               .then(bikeRes => {
-                console.log(bikeRes);
+                // console.log(bikeRes);
+                this.searching = false; // hide searching gif
+                if(bikeRes.features.length !== 0){
+                  this.dataService.setSearchResults(bikeRes.features);
+                }else{
+                  this.dataService.setNullResult();
+                }
 
-                this.dataService.setSearchResults(bikeRes.features);
               });
           }).catch(err => console.log(err));
 
@@ -214,7 +231,7 @@ export class SearchFormComponent implements OnInit {
       where = where === '' ? `TRAIL_NAME='${this.trailName}'` : where + ` AND (TRAIL_NAME='${this.trailName}')`
     }
 
-    console.log('vehicles', vehicles, '\nsurfaces', surfaces, '\nwhere', where);
+    // console.log('vehicles', vehicles, '\nsurfaces', surfaces, '\nwhere', where);
 
 
     return where;
@@ -245,6 +262,28 @@ export class SearchFormComponent implements OnInit {
       this.selectedRegion = this.dataService.getRegionForCounty(this.selectedCounty);
       this.onRegionChange();
     }
+  }
+
+  resetForm(){
+    this.regions = this.allRegions;  // set to all, so that all are displayed
+    this.counties = this.allCounties;
+
+    this.selectedRegion = 'All';
+    this.selectedCounty = 'All';
+    this.isPaved= false;
+    this.isGravel = false;
+    this.isStoneDust = false;
+    this.isDirt = false;
+    this.isBoardwalk = false;
+
+    this.isWalking = false;
+    this.isBiking = false;
+    this.isSkating = false;
+    this.isATV = false;
+    this.isHorse = false;
+    this.isSkiing = false;
+    this.isSnowmoblie = false;
+    this.trailName = '';
   }
 
 }

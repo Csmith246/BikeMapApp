@@ -1,0 +1,17 @@
+#mainWrapperDiv{
+    width: 896px;
+    /* display: flex;
+    flex-direction: column;
+    justify-content: center; */
+    margin: auto;
+}
+
+#contentSizer{
+    width: 895px;
+    border: 1px solid black;
+    border-top: none;
+}
+
+#imgDiv{
+    height: 90px;
+}

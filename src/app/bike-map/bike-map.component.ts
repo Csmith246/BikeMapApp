@@ -66,26 +66,6 @@ export class BikeMapComponent implements OnInit {
         view.ui.move("zoom", "bottom-right");
 
 
-
-        // var basemapGallery = new BasemapGallery({
-        //   container: this.onScreenDiv.nativeElement
-        // });
-
-        // Add widget to the top right corner of the view
-        // view.ui.add(basemapGallery, {
-        //   position: "top-right"
-        // });
-
-        // var legend = new Legend({
-        //   view: view,
-        //   layerInfos: [{
-        //     layer: webMap,
-        //     title: "Legend"
-        //   }]
-        // });
-
-        // view.ui.add(legend, "bottom-right");
-
         let sources = [{
           locator: new Locator({ url: "https://gisservices.its.ny.gov/arcgis/rest/services/Locators/Street_and_Address_Composite/GeocodeServer" }),
           singleLineFieldName: "SingleLine",
@@ -123,8 +103,7 @@ export class BikeMapComponent implements OnInit {
           suggestionsEnabled: true,
 
         });
-        // Adds the search widget below other elements in
-        // the top left corner of the view
+        
         view.ui.add(searchWidget, {
           position: "top-right"
         });
@@ -144,34 +123,7 @@ export class BikeMapComponent implements OnInit {
           container: 'basemapWid'
         });
 
-
-        // view.when(() => {
-        // console.log("FULL WEBMAP?", webMap);
-        // console.log(webMap.layers.items);
-
-        // var bikeMapLyrs = webMap.layers.items.filter((lyr) => {
-        //   // console.log(lyr);
-        //   if (lyr.id.indexOf("BikeMap") !== -1) {
-        //     return true;
-        //   }
-        //   return false;
-        // });
-        // console.log(bikeMapLyrs);
-        // var bikeRouteSubLyrs = bikeMapLyrs[0].sublayers.items.filter(sublyr => {
-        //   if (sublyr.id === 8) {
-        //     return true;
-        //   }
-        //   return false;
-        // });
-        // console.log(bikeRouteSubLyrs);
-
-        // var bikeRouteLyr = bikeRouteSubLyrs[0];
-
-        // console.log("REEEEEEE", bikeRouteLyr);
-
-        // });
-
-
+        // watch for selected trail update
         var savedLyr = null;
         this.tabNavigationService.currentTrailName.subscribe((trailName) => {
           if(savedLyr){
@@ -199,8 +151,8 @@ export class BikeMapComponent implements OnInit {
                   type: "simple",  // autocasts as new SimpleRenderer()
                   symbol: {
                     type: "simple-line",  // autocasts as new SimpleMarkerSymbol()
-                    width: "5px",
-                    color: "#38e7ff"
+                    width: "7px",
+                    color: "#fff842"
                   }
                 }
               });

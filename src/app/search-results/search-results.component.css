@@ -1,8 +1,23 @@
+.noResults{
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 30px;
+}
+
+h1, h3{
+    margin: 0px;
+}
+
 #searchResults{
     display:flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+
+    margin-top: 7px;
+    margin-bottom: 20px;
 }
 
 #sizer{
@@ -10,12 +25,25 @@
 }
 
 #searchHeader{
-    text-align: center;
-    background-color: rgb(0, 0, 100);
+    display:flex;
+    justify-content: space-between;
+    align-items: center;
+
+    /* text-align: center; */
+    background-color: #103562;
     color: white;
     padding: 20px 0px;
-    margin: 10px 30px;
-    border-radius: 25px;
+    /* margin: 10px 30px; */
+    /* border-radius: 25px; */
+}
+
+#searchHeader > *{
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+#searchResultsBorder{
+    border: 1px solid black;
 }
 
 .tableStyle{

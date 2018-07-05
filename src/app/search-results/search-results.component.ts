@@ -12,13 +12,17 @@ export class SearchResultsComponent implements OnInit {
 
   results: Object[] = [];
 
+  currentRegion: String = "None";
+  currentCounty: String = "None";
+
   constructor(
     private dataService: DataService,
     private tabNavigationService: TabNavigationService
   ) { }
 
   ngOnInit() {
-    this.dataService.currentSearchResults.subscribe((res)=>{this.results = res; console.log("IN SEARCH RESULTS", this.results);})
+    this.dataService.currentSearchResults.subscribe((res)=>{this.results = res; console.log("IN SEARCH RESULTS", this.results);});
+    this.dataService.currentSearchData.subscribe((data)=>{this.currentCounty = data["county"]; this.currentRegion = data["region"];});
   }
 
   highlightTrail(trailName){

@@ -1,6 +1,6 @@
-.main{
+/* .main{
     width:900px;
-}
+} */
 
 .flexColumn{
     display: flex;
@@ -10,11 +10,19 @@
 .flexRow{
     display: flex;
     justify-content: center;
+   
+}
+
+#search-form{
+    margin: 20px;
+    /* border-top: 1px solid black; */
+    border-bottom: 1px solid black;
+    background-color: white;
 }
 
 
 .center {
-    /* justify-content: center; */
+    justify-content: center;
 }
 
 
@@ -22,8 +30,8 @@
     width: 430px;
     margin: 4px;
     padding: 5px;
-    border: 2px solid rgb(196, 196, 134) ;
-    border-radius: 15px;
+    /* border: 2px solid rgb(196, 196, 134) ;
+    border-radius: 15px; */
 }
 
 .marAuto{
@@ -34,3 +42,53 @@
 .paddin{
     padding: 5px;
 }
+
+#secondCol{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    resize: vertical;
+}
+
+#secondColHeader{
+    margin:0px;
+    text-align: center;
+}
+
+.rightPadding{
+    padding-right: 10px;
+}
+
+.labelstyling{
+    padding-top: 10px;
+    font-size: 9px;
+    margin-bottom: -10px;
+    color: grey;
+}
+
+#search-submit{
+    padding-bottom: 20px;
+    padding-top: 10px;
+}
+
+.buttonPadding{
+    margin: 5px;
+}
+
+.formBtn {
+    -webkit-border-radius: 28;
+    -moz-border-radius: 28;
+    border: none;
+    border-radius: 28px;
+    color: #ffffff;
+    font-size: 12px;
+    background: #103562;
+    padding: 5px 10px 5px 10px;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  
+  .formBtn:hover {
+    background: #49596b;
+    text-decoration: none;
+  }

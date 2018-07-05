@@ -1,6 +1,18 @@
-<div id="searchResults" *ngIf="results.length !== 0">
-  <div id="sizer">
-    <h2 id="searchHeader">Search Results</h2>
+<div class="noResults" *ngIf="results === null">
+  <h1>No Results</h1>
+  <h3>Please try again</h3>
+</div>
+
+
+<div id="searchResults" *ngIf="results !== null && results.length !== 0">
+  <div id="sizer searchResultsBorder">
+    <div id="searchHeader">
+      <h1>Search Results</h1>
+      <div>
+        <h3>Region: {{currentRegion}}</h3>
+        <h3>County: {{currentCounty}}</h3>
+      </div>
+    </div>
     <table class="tableStyle">
       <tr class="table-text-bottom">
         <th>Trail</th>
