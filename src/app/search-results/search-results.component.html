@@ -13,6 +13,21 @@
         <h3>County: {{currentCounty}}</h3>
       </div>
     </div>
+
+    <div id="paginationControls">
+      <p>Total Records: {{results.length}}</p>
+      <div id="paginationButtons" *ngIf="results.length > resultsPerPage">
+        <button (click)="pageDown()">Prev</button>
+        <button *ngFor="let page of paginationOptions" 
+                (click)="handlePageChange(page)"
+                [class.currentSelectedButton]="currentPage === page">
+                {{page}}
+              </button>
+        <button (click)="pageUp()">Next</button>
+      </div>
+      <p>Page {{currentPage}} of {{lastPage}}</p>
+    </div>
+
     <table class="tableStyle">
       <tr class="table-text-bottom">
         <th>Trail</th>
@@ -41,39 +56,55 @@
           <img src="../../assets/snow-head.jpg" alt="">
         </th>
       </tr>
-      <tr class="table-text-top" *ngFor="let result of results">
-        <td class="titleCol">
-          <a href="https://www.dot.ny.gov/portal/pls/portal/MEXIS_APP.DYN_BIKE_TRAIL_DETAIL_MAIN.show?p_arg_names=p_trail_id&p_arg_values={{result.attributes['TRAIL_ID']}}"
-            target="_blank">
-            {{result.attributes["TRAIL_NAME"]}}
-          </a>
-          <img (click)="highlightTrail(result.attributes['TRAIL_NAME'])" src="../../assets/smallNYSIcon.gif" alt="" />
+
+      <tr class="table-text-top" *ngFor="let offset of offsets">
+        <td class="titleCol textCenter">
+          <div class="titleFormat">
+            <a href="https://www.dot.ny.gov/portal/pls/portal/MEXIS_APP.DYN_BIKE_TRAIL_DETAIL_MAIN.show?p_arg_names=p_trail_id&p_arg_values={{results[currentIndexBase + offset].attributes['TRAIL_ID']}}"
+              target="_blank">
+              {{results[currentIndexBase + offset].attributes["TRAIL_NAME"]}}
+            </a>
+            <div class="titleMapLink">
+              <img (click)="highlightTrail(results[currentIndexBase + offset].attributes['TRAIL_NAME'])" src="../../assets/smallNYSIcon.gif"
+                alt="" />
+              <p>(Map)</p>
+            </div>
+          </div>
         </td>
-        <td class="lengthCol">{{result.attributes["TRAILLENGTH"]}} Miles</td>
-        <td class="surfaceCol">{{result.attributes["SURFACE_TYPE"]}}</td>
-        <td class="descriptionCol">{{result.attributes["TRAIL_DESC"]}}</td>
-        <td class="useTypeCol">
-          <img *ngIf="result.attributes['WALKING'] !== null" src="../../assets/walk-icon.png" width="20px" height="20px">
-        </td>
-        <td class="useTypeCol">
-          <img *ngIf="result.attributes['BIKING'] !== null" src="../../assets/bike-icon.png" width="20px" height="20px">
-        </td>
-        <td class="useTypeCol">
-          <img *ngIf="result.attributes['SKATING'] !== null" src="../../assets/skate-icon.png" width="20px" height="20px">
-        </td>
-        <td class="useTypeCol">
-          <img *ngIf="result.attributes['ATV'] !== null" src="../../assets/atv-icon.png" width="20px" height="20px">
+        <td class="lengthCol textCenter">{{results[currentIndexBase + offset].attributes["TRAILLENGTH"]}} Miles</td>
+        <td class="surfaceCol textCenter">{{results[currentIndexBase + offset].attributes["SURFACE_TYPE"]}}</td>
+        <td class="descriptionCol">
+          <p>{{results[currentIndexBase + offset].attributes["TRAIL_DESC"]}}</p>
         </td>
         <td class="useTypeCol">
-          <img *ngIf="result.attributes['HORSERIDING'] !== null" src="../../assets/horse-icon.png" width="20px" height="20px">
+          <img *ngIf="results[currentIndexBase + offset].attributes['WALKING'] !== null" src="../../assets/walk-icon.png" width="20px"
+            height="20px">
         </td>
         <td class="useTypeCol">
-          <img *ngIf="result.attributes['SKIING'] !== null" src="../../assets/ski-icon.png" width="20px" height="20px">
+          <img *ngIf="results[currentIndexBase + offset].attributes['BIKING'] !== null" src="../../assets/bike-icon.png" width="20px"
+            height="20px">
         </td>
         <td class="useTypeCol">
-          <img *ngIf="result.attributes['SNOWMOBILE'] !== null" src="../../assets/snow-mobile-icon.png" width="20px" height="20px">
+          <img *ngIf="results[currentIndexBase + offset].attributes['SKATING'] !== null" src="../../assets/skate-icon.png" width="20px"
+            height="20px">
+        </td>
+        <td class="useTypeCol">
+          <img *ngIf="results[currentIndexBase + offset].attributes['ATV'] !== null" src="../../assets/atv-icon.png" width="20px" height="20px">
+        </td>
+        <td class="useTypeCol">
+          <img *ngIf="results[currentIndexBase + offset].attributes['HORSERIDING'] !== null" src="../../assets/horse-icon.png" width="20px"
+            height="20px">
+        </td>
+        <td class="useTypeCol">
+          <img *ngIf="results[currentIndexBase + offset].attributes['SKIING'] !== null" src="../../assets/ski-icon.png" width="20px"
+            height="20px">
+        </td>
+        <td class="useTypeCol">
+          <img *ngIf="results[currentIndexBase + offset].attributes['SNOWMOBILE'] !== null" src="../../assets/snow-mobile-icon.png"
+            width="20px" height="20px">
         </td>
       </tr>
+
     </table>
   </div>
 </div>
