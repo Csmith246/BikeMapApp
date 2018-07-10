@@ -27,6 +27,11 @@ export class BikeMapComponent implements OnInit {
 
   accordianSelectedIndex: number;
 
+  selectedTrail: string = '';
+  savedLyr = null;
+  webMap;
+  isSelectedInfoVisible: boolean = false;
+
   constructor(private tabNavigationService: TabNavigationService) { }
 
 
@@ -56,6 +61,8 @@ export class BikeMapComponent implements OnInit {
 
         console.log(webMap);
 
+        this.webMap = webMap;
+
 
         // and we show that map in a container w/ id #viewDiv
         var view = new MapView({
@@ -66,7 +73,23 @@ export class BikeMapComponent implements OnInit {
         view.ui.move("zoom", "bottom-right");
 
 
-        let sources = [{
+        let sources = [
+          {
+            locator: new Locator({ url: "https://gisservices.its.ny.gov/arcgis/rest/services/Locators/NYPlace/GeocodeServer" }),
+            singleLineFieldName: "SingleLine",
+            name: "NYS Place Locator",
+            localSearchOptions: {
+              minScale: 300000,
+              distance: 50000
+            },
+            placeholder: "Find Place",
+            exactMatch: false,
+            maxResults: 3,
+            maxSuggestions: 6,
+            suggestionsEnabled: true,
+            minSuggestCharacters: 0
+          },
+          {
           locator: new Locator({ url: "https://gisservices.its.ny.gov/arcgis/rest/services/Locators/Street_and_Address_Composite/GeocodeServer" }),
           singleLineFieldName: "SingleLine",
           name: "NYS Address Locator",
@@ -80,29 +103,17 @@ export class BikeMapComponent implements OnInit {
           maxSuggestions: 6,
           suggestionsEnabled: true,
           minSuggestCharacters: 0
-        }, {
-          locator: new Locator({ url: "https://gisservices.its.ny.gov/arcgis/rest/services/Locators/NYPlace/GeocodeServer" }),
-          singleLineFieldName: "SingleLineFieldName",
-          name: "NYS Place Locator",
-          localSearchOptions: {
-            minScale: 300000,
-            distance: 50000
-          },
-          placeholder: "Find Place",
-          exactMatch: false,
-          maxResults: 3,
-          maxSuggestions: 6,
-          suggestionsEnabled: true,
-          minSuggestCharacters: 0
         }]
 
 
         var searchWidget = new Search({
           view: view,
-          sources: sources,
+          sources: [],
           suggestionsEnabled: true,
 
         });
+
+        searchWidget.sources = sources;
         
         view.ui.add(searchWidget, {
           position: "top-right"
@@ -124,10 +135,9 @@ export class BikeMapComponent implements OnInit {
         });
 
         // watch for selected trail update
-        var savedLyr = null;
         this.tabNavigationService.currentTrailName.subscribe((trailName) => {
-          if(savedLyr){
-            webMap.remove(savedLyr);
+          if(this.savedLyr){
+            webMap.remove(this.savedLyr);
           }
 
           console.log(trailName, "IN BIKE MAPPPP");
@@ -158,7 +168,9 @@ export class BikeMapComponent implements OnInit {
               });
 
               webMap.add(selectedLyr);
-              savedLyr = selectedLyr;
+              this.savedLyr = selectedLyr;
+
+              this.setupOnScreenInfo(trailName);
 
               console.log(webMap);
 
@@ -193,6 +205,20 @@ export class BikeMapComponent implements OnInit {
     } else {
       this.accordianSelectedIndex = null;
     }
+  }
+
+
+  setupOnScreenInfo(trailName){
+    this.selectedTrail = trailName;
+    this.isSelectedInfoVisible = true;
+  }
+
+  x_clickHandler(){
+    this.webMap.remove(this.savedLyr);
+    this.selectedTrail = '';
+    this.savedLyr = null;
+
+    this.isSelectedInfoVisible = false;
   }
 
 }

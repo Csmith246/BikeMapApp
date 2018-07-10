@@ -60,6 +60,44 @@
 }
 
 
+
+/*
+    OnScreen Selected Info - START
+*/
+.onScreenSelectedInfo{
+    position: absolute;
+    left: 20px;
+    bottom: 20px;
+    background-color: white;
+    padding: 5px;
+    border: 1px solid black;
+    border-radius: 20px;
+    
+}
+
+.onScreenSelectedInfo .flexContainer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.onScreenSelectedInfo h2{
+    margin: 0px;
+    padding: 0px 10px;
+    text-align: left;
+    max-width: 650px;
+}
+
+.onScreenSelectedInfo .clearButton{
+    cursor: pointer;
+    padding-right: 10px;
+}
+
+/*
+    OnScreen Selected Info - FINISH
+*/
+
+
 /* These two don't work, but it would be nice if they did */
 #basemapWid .esri-basemap-gallery__item-thumbnail{
     height: 40px !important;
