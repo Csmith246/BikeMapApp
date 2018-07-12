@@ -11,6 +11,9 @@ import { StaticDataService } from '../../services/static-data.service';
 })
 export class BikeMapComponent implements OnInit {
 
+  mapPortalId: String;
+  portalURL: String;
+
   bikeService: String;
   placeLocService: String;
   addressLocService: String;
@@ -36,6 +39,9 @@ export class BikeMapComponent implements OnInit {
     private tabNavigationService: TabNavigationService,
     private staticDataService: StaticDataService
   ) { 
+    this.mapPortalId = staticDataService.getMapPortalId();
+    this.portalURL = staticDataService.getPortalURL();
+
     this.bikeService = staticDataService.getBikeServiceURL();
     this.placeLocService = staticDataService.getPlaceLocURL();
     this.addressLocService = staticDataService.getAddressLocURL();
@@ -50,11 +56,11 @@ export class BikeMapComponent implements OnInit {
       "esri/tasks/Locator", 'esri/tasks/QueryTask', 'esri/layers/FeatureLayer', 'dojo/domReady!']) 
       .then(([esriConfig, WebMap, MapView, Legend, BasemapGallery, Search, Locator, QueryTask, FeatureLayer]) => {
 
-        esriConfig.portalUrl = "https://nysdot.maps.arcgis.com";
+        esriConfig.portalUrl = this.portalURL;
 
         var webMap = new WebMap({
           portalItem: {
-            id: "0f19d832827948b7b8f8d647a2bdeb35"
+            id: this.mapPortalId
           }
         });
 

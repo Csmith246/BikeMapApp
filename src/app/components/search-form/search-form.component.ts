@@ -1,18 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import esriLoader from 'esri-loader';
+// Material
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatSelectModule} from '@angular/material/select';
 import {MatInputModule} from '@angular/material/input';
 import {MatFormFieldModule} from '@angular/material/form-field';
-
-
-// Class Imports
+// Classes 
 import { County } from '../../models/county';
 import { Region } from '../../models/region';
-
-//Services
+// Services
 import { DataService } from '../../services/data.service';
+import { StaticDataService } from '../../services/static-data.service';
 
 @Component({
   selector: 'app-search-form',
@@ -32,7 +31,7 @@ export class SearchFormComponent implements OnInit {
   countyService: String = 'https://gisservices.its.ny.gov/arcgis/rest/services/NYS_Civil_Boundaries/FeatureServer/3';
   regionService: String = 'https://gistest3.dot.ny.gov/arcgis/rest/services/BroadbandAvailability_REDC/MapServer/0';
   stateService: String ='https://gisservices.its.ny.gov/arcgis/rest/services/NYS_Civil_Boundaries/FeatureServer/0';
-  bikeService: String = 'https://gistest3.dot.ny.gov/arcgis/rest/services/Portal_NYSBikeMap/MapServer/8';
+  bikeService: String;
 
   isPaved: Boolean = false;
   isGravel: Boolean = false;
@@ -53,9 +52,10 @@ export class SearchFormComponent implements OnInit {
   searching: Boolean = false;
 
   constructor(
-    private dataService: DataService
+    private dataService: DataService,
+    private staticDataService: StaticDataService
   ) {
-
+    this.bikeService = staticDataService.getBikeServiceURL();
   }
 
   ngOnInit() {
@@ -119,11 +119,8 @@ export class SearchFormComponent implements OnInit {
 
 
   search() {
-    esriLoader.loadModules(['esri/tasks/QueryTask', 'esri/config', 'esri/geometry/geometryEngine', "esri/tasks/support/Query"])
-      .then(([QueryTask, esriConfig, geoEngine, Query]) => {
-        //esriConfig.request.corsEnabledServers.push("https://gistest3.dot.ny.gov");
-        // esriConfig.request.proxyUrl = "https://gistest3.dot.ny.gov/CSmith/DotNetProxy/proxy.ashx";
-        // esriConfig.request.forceProxy = true;
+    esriLoader.loadModules(['esri/tasks/QueryTask', "esri/tasks/support/Query"])
+      .then(([QueryTask, Query]) => {
 
         this.searching = true; // display searching gif
         this.dataService.setSearchResults([]); // causes previous results to go away
@@ -243,16 +240,13 @@ export class SearchFormComponent implements OnInit {
       this.counties = this.allCounties;
     } else {
       let countiesForRegion: String[] = this.dataService.getCountiesForRegion(this.selectedRegion).sort();
-
       if (countiesForRegion.indexOf(this.selectedCounty) === -1) { // Check to see if currently selected county is in new county options
         this.selectedCounty = 'All';
       }
-
       let countiesForRegionProper: County[] = countiesForRegion.map((county) => {
         return new County(county);
       });
       this.counties = countiesForRegionProper;
-
     }
   }
 
