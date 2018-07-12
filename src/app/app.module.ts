@@ -10,11 +10,11 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 
 import { AppComponent } from './app.component';
-import { BikeMapComponent } from './bike-map/bike-map.component';
-import { SearchComponent } from './search/search.component';
-import { SearchFormComponent } from './search-form/search-form.component';
-import { SearchResultsComponent } from './search-results/search-results.component';
-import { TabsComponent } from './tabs/tabs.component';
+import { BikeMapComponent } from './components/bike-map/bike-map.component';
+import { SearchComponent } from './components/search/search.component';
+import { SearchFormComponent } from './components/search-form/search-form.component';
+import { SearchResultsComponent } from './components/search-results/search-results.component';
+import { TabsComponent } from './components/tabs/tabs.component';
 
 @NgModule({
   declarations: [

@@ -8,11 +8,11 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 
 
 // Class Imports
-import { County } from '../county';
-import { Region } from '../region';
+import { County } from '../../models/county';
+import { Region } from '../../models/region';
 
 //Services
-import { DataService } from '../data.service';
+import { DataService } from '../../services/data.service';
 
 @Component({
   selector: 'app-search-form',

@@ -1,8 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import esriLoader from 'esri-loader';
 
-import { TabNavigationService } from '../tab-navigation.service';
-import { StaticDataService } from '../static-data.service';
+import { TabNavigationService } from '../../services/tab-navigation.service';
+import { StaticDataService } from '../../services/static-data.service';
 
 @Component({
   selector: 'bike-map',
@@ -12,6 +12,8 @@ import { StaticDataService } from '../static-data.service';
 export class BikeMapComponent implements OnInit {
 
   bikeService: String;
+  placeLocService: String;
+  addressLocService: String;
 
   accordianSelectedIndex: number;
   accordionData = [{
@@ -35,6 +37,8 @@ export class BikeMapComponent implements OnInit {
     private staticDataService: StaticDataService
   ) { 
     this.bikeService = staticDataService.getBikeServiceURL();
+    this.placeLocService = staticDataService.getPlaceLocURL();
+    this.addressLocService = staticDataService.getAddressLocURL();
   }
 
 
@@ -64,7 +68,7 @@ export class BikeMapComponent implements OnInit {
 
 
         let sources = [{
-            locator: new Locator({ url: "https://gisservices.its.ny.gov/arcgis/rest/services/Locators/NYPlace/GeocodeServer" }),
+            locator: new Locator({ url: this.placeLocService }),
             singleLineFieldName: "SingleLineCityName",
             name: "NYS Place Locator",
             localSearchOptions: {
@@ -78,7 +82,7 @@ export class BikeMapComponent implements OnInit {
             suggestionsEnabled: true,
             minSuggestCharacters: 0
           }, {
-          locator: new Locator({ url: "https://gisservices.its.ny.gov/arcgis/rest/services/Locators/Street_and_Address_Composite/GeocodeServer" }),
+          locator: new Locator({ url: this.addressLocService }),
           singleLineFieldName: "SingleLine",
           name: "NYS Address Locator",
           localSearchOptions: {

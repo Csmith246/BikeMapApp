@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
-import { County } from './county';
-import { Region } from './region';
+import { County } from '../models/county';
+import { Region } from '../models/region';
 
 @Injectable({
   providedIn: 'root'

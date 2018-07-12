@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { TabNavigationService } from '../tab-navigation.service';
+import { TabNavigationService } from '../../services/tab-navigation.service';
 
 import {MatTabsModule} from '@angular/material/tabs';
 

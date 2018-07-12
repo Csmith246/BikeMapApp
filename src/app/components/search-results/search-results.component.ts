@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { DataService } from '../data.service';
-import { TabNavigationService } from '../tab-navigation.service';
+import { DataService } from '../../services/data.service';
+import { TabNavigationService } from '../../services/tab-navigation.service';
 import { Observable } from 'rxjs';
 
 @Component({
