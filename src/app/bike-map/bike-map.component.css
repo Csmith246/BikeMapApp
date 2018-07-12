@@ -22,10 +22,6 @@
     transition: 0.4s;
 }
 
-/* 
-.widgetElem:last-child .accordion{
-    border-bottom: none;
-} */
 
 
 .active, .accordion:hover {
@@ -92,17 +88,6 @@
     cursor: pointer;
     padding-right: 10px;
 }
-
 /*
     OnScreen Selected Info - FINISH
 */
-
-
-/* These two don't work, but it would be nice if they did */
-#basemapWid .esri-basemap-gallery__item-thumbnail{
-    height: 40px !important;
-}
-
-.esri-legend__service-label{
-    display: none;
-}

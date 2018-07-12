@@ -1,26 +1,24 @@
+<!-- Map and Map Accessories-->
 <div style="width:894px; height: 700px;" id="viewDiv">
-    <div class="onScreenAccord">
 
+    <!-- OnScreen Widgets -->
+    <div class="onScreenAccord">
         <div class="widgetElem" *ngFor="let accordElem of accordionData; let i = index">
             <button class="accordion" (click)="setActiveAccord(i)" [class.active]="accordianSelectedIndex === i">
                 <img class="imgCorrection" src="{{accordElem.imgSrc}}" alt="" width="20px" height="20px">
             </button>
             <div class="panel" id="{{accordElem.id}}" [class.show]="accordianSelectedIndex === i">
-                <div id="basemap-title" *ngIf="accordElem.id === 'basemapWid'">Basemap Gallery</div>
+                <div id="basemap-title" *ngIf="accordElem.id === 'basemapWid'">Basemap Gallery</div> <!--Hackish way to get this Header in-->
             </div>
         </div>
-
     </div>
 
-    <div class="onScreenSelectedInfo" [style.display]="isSelectedInfoVisible ? 'block' : 'none'">
+    <!-- OnScreen Info -->
+    <div class="onScreenSelectedInfo" [style.display]="isOnScreenInfoVisible ? 'block' : 'none'">
         <div class="flexContainer">
             <h2>{{selectedTrail}}</h2>
-            <!-- <button (click)="x_clickHandler()">Clear</button> -->
             <img class="clearButton" (click)="x_clickHandler()" width="20px" src="../../assets/x-button.svg" alt="">
         </div>
     </div>
+
 </div>
-
-<!-- <div class="basemapWid" #basemapWid></div> -->
-
-<div id="widgetDiv"></div>
