@@ -15,6 +15,7 @@ import { SearchComponent } from './components/search/search.component';
 import { SearchFormComponent } from './components/search-form/search-form.component';
 import { SearchResultsComponent } from './components/search-results/search-results.component';
 import { TabsComponent } from './components/tabs/tabs.component';
+import { CheckboxComponent } from './components/checkbox/checkbox.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { TabsComponent } from './components/tabs/tabs.component';
     SearchComponent,
     SearchFormComponent,
     SearchResultsComponent,
-    TabsComponent
+    TabsComponent,
+    CheckboxComponent
   ],
   imports: [
     BrowserModule,
