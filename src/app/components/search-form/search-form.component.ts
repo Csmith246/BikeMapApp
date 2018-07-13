@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import esriLoader from 'esri-loader';
+import { Subject } from 'rxjs';
 // Material
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatSelectModule} from '@angular/material/select';
@@ -12,6 +13,7 @@ import { Region } from '../../models/region';
 // Services
 import { DataService } from '../../services/data.service';
 import { StaticDataService } from '../../services/static-data.service';
+
 
 @Component({
   selector: 'app-search-form',
@@ -33,19 +35,15 @@ export class SearchFormComponent implements OnInit {
   stateService: String ='https://gisservices.its.ny.gov/arcgis/rest/services/NYS_Civil_Boundaries/FeatureServer/0';
   bikeService: String;
 
-  isPaved: Boolean = false;
-  isGravel: Boolean = false;
-  isStoneDust: Boolean = false;
-  isDirt: Boolean = false;
-  isBoardwalk: Boolean = false;
+  surfaceTypes: string[] = ["Paved", "Gravel", "StoneDust", "Dirt", "Boardwalk"];
+  useTypes: string[][] = [["Walking", "../../assets/walk-icon.png"],
+    ["Biking", "../../assets/bike-icon.png"], ["Skating", "../../assets/skate-icon.png"],
+    ["ATV", "../../assets/atv-icon.png"], ["Horse", "../../assets/horse-icon.png"],
+    ["Skiing", "../../assets/ski-icon.png"], ["Snowmobile", "../../assets/snow-mobile-icon.png"]];
 
-  isWalking: Boolean = false;
-  isBiking: Boolean = false;
-  isSkating: Boolean = false;
-  isATV: Boolean = false;
-  isHorse: Boolean = false;
-  isSkiing: Boolean = false;
-  isSnowmoblie: Boolean = false;
+  SQLFromCheckboxes = {};
+
+  resetTrigger: Subject<string> = new Subject();
 
   trailName: String = '';
 
@@ -55,11 +53,25 @@ export class SearchFormComponent implements OnInit {
     private dataService: DataService,
     private staticDataService: StaticDataService
   ) {
+    // Get bike service URL
     this.bikeService = staticDataService.getBikeServiceURL();
+    // Initialize SQL holding object
+    this.initializeSQLHolder();
   }
 
   ngOnInit() {
     this.loadSelects();
+  }
+
+  initializeSQLHolder(){
+    this.SQLFromCheckboxes = this.surfaceTypes.reduce((acc, currVal) => {
+      acc[currVal] = "";
+      return acc;
+    }, {});
+    this.SQLFromCheckboxes = this.useTypes.reduce((acc, currVal) => {
+      acc[currVal[0]] = "";
+      return acc;
+    }, this.SQLFromCheckboxes);
   }
 
   loadSelects() {
@@ -189,49 +201,37 @@ export class SearchFormComponent implements OnInit {
 
   buildWhereQuery(): String {
 
-    function areNull(...isArgs: Boolean[]) {  // true-> 'y', false->null
-      return !isArgs.reduce((acc, arg) => {
-        return acc || arg;  // OR the falses until a true comes and chgs result to true
-      });
-    }
-
-    function _prepTypes(myVar: Boolean, name: String) {
-      if (myVar) {
-        return name + "='Y'";
-      } else {
-        return "";
-      }
-    }
     let vehicles: String = '';
     let surfaces: String = '';
     let where: String = '';
 
-    if (!areNull(this.isATV, this.isBiking, this.isHorse, this.isSkating, this.isSkiing, this.isSnowmoblie, this.isWalking)) {
-      vehicles = [_prepTypes(this.isATV, 'ATV'), _prepTypes(this.isBiking, 'BIKING'),
-      _prepTypes(this.isHorse, 'HORSERIDING'), _prepTypes(this.isSkating, 'SKATING'),
-      _prepTypes(this.isSkiing, 'SKIING'), _prepTypes(this.isSnowmoblie, 'SNOWMOBILE'), _prepTypes(this.isWalking, 'WALKING')]
-        .filter(elem => elem === '' ? false : true).join(' OR ');
-      vehicles = '(' + vehicles + ')';
-    }
-    if (!areNull(this.isBoardwalk, this.isDirt, this.isGravel, this.isPaved, this.isStoneDust)) {
-      surfaces = [_prepTypes(this.isBoardwalk, 'BOARDWALK'), _prepTypes(this.isDirt, 'DIRT'),
-      _prepTypes(this.isGravel, 'GRAVEL'), _prepTypes(this.isPaved, 'PAVED'),
-      _prepTypes(this.isStoneDust, 'STONEDUST')]
-        .filter(elem => elem === '' ? false : true).join(' OR ');
-      surfaces = '(' + surfaces + ')';
-    }
+    // Get SQL from CheckBox Components HERE
+    let vehicleTypes = this.useTypes.map((elem)=>{ return elem[0]; });
+    vehicles = vehicleTypes
+      .map(elem=>{return this.SQLFromCheckboxes[elem]})
+      .filter(elem=>{return elem === '' ? false: true})
+      .join(' OR ');
+    
+    console.log("vehicle SQL", vehicles);
 
-    where = vehicles !== '' && surfaces !== '' ? vehicles + ' AND ' + surfaces : vehicles.concat(String(surfaces));
+    surfaces = this.surfaceTypes
+      .map(elem=>{return this.SQLFromCheckboxes[elem]})
+      .filter(elem=>{return elem === '' ? false: true})
+      .join(' OR ');
+    
+    console.log("surface SQL", surfaces);
+
+    where = vehicles !== '' && surfaces !== '' ? `(${vehicles}) AND (${surfaces})` : `(${vehicles.concat(String(surfaces))})`;
 
     if (this.trailName !== '') {
       console.log("IN TRAILNAMEEEEEEEEEEEEEEE");
       where = where === '' ? `TRAIL_NAME='${this.trailName}'` : where + ` AND (TRAIL_NAME='${this.trailName}')`
     }
 
-    // console.log('vehicles', vehicles, '\nsurfaces', surfaces, '\nwhere', where);
+    console.log('vehicles', vehicles, '\nsurfaces', surfaces, '\nwhere', where);
 
 
-    return where;
+    return where!=='()' ? where : ""; //need to return "" if where is "()"
   }
 
 
@@ -264,20 +264,15 @@ export class SearchFormComponent implements OnInit {
 
     this.selectedRegion = 'All';
     this.selectedCounty = 'All';
-    this.isPaved= false;
-    this.isGravel = false;
-    this.isStoneDust = false;
-    this.isDirt = false;
-    this.isBoardwalk = false;
 
-    this.isWalking = false;
-    this.isBiking = false;
-    this.isSkating = false;
-    this.isATV = false;
-    this.isHorse = false;
-    this.isSkiing = false;
-    this.isSnowmoblie = false;
+    //Trigger reset mechanism HERE
+    this.resetTrigger.next("Reset")
+
     this.trailName = '';
+  }
+
+  updateSQL(updateInfo){
+    this.SQLFromCheckboxes[updateInfo[0]] = updateInfo[1]; //Update SQL for checkbox that emitted the event
   }
 
 }

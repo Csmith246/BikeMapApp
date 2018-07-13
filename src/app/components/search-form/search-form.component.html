@@ -3,97 +3,47 @@
     <div id="1stCol" class="flexColumn rowElem">
 
       <mat-form-field>
-
         <div>
-          <!-- <label for="regions">NYSDOT Region:</label> -->
           <mat-select [(value)]="selectedRegion" placeholder="NYSDOT Region" name="regions" id="regionSelect" (selectionChange)="onRegionChange()">
             <mat-option value="All" selected>All</mat-option>
             <mat-option *ngFor="let region of regions" value={{region.name}}>{{region.name}}</mat-option>
           </mat-select>
         </div>
       </mat-form-field>
+
       <mat-form-field>
         <div>
-          <!-- <label for="county">County:</label> -->
           <mat-select [(value)]="selectedCounty" placeholder="County" name="county" id="countySelect" (selectionChange)="onCountyChange()">
             <mat-option value="All" selected>All</mat-option>
             <mat-option *ngFor="let county of counties" value={{county.name}}>{{county.name}}</mat-option>
           </mat-select>
         </div>
       </mat-form-field>
+
       <mat-form-field>
         <div>
-          <!-- <label for="">Trail Name:</label> -->
           <input #trailname matInput placeholder="Trail Name" [value]="trailName" (change)="trailName = trailname.value" type="text">
         </div>
       </mat-form-field>
-        <div>
-          <!-- Refactor to a component -->
-          <div class="labelstyling">Surface Type:</div> <br/>
-          <mat-checkbox class="rightPadding" type="checkbox" id="paved" [checked]="isPaved" (change)="isPaved = !isPaved">Paved</mat-checkbox>
-          <mat-checkbox class="rightPadding" type="checkbox" id="gravel" [checked]="isGravel" (change)="isGravel = !isGravel">Gravel</mat-checkbox>
-          <mat-checkbox class="rightPadding" type="checkbox" id="stoneDust" [checked]="isStoneDust" (change)="isStoneDust = !isStoneDust">Stone Dust</mat-checkbox>
-          <mat-checkbox class="rightPadding" type="checkbox" id="dirt" [checked]="isDirt" (change)="isDirt = !isDirt">Dirt</mat-checkbox>
-          <mat-checkbox class="rightPadding" type="checkbox" id="boardwalk" [checked]="isBoardwalk" (change)="isBoardwalk = !isBoardwalk">Boardwalk</mat-checkbox>
-        </div>
 
-      
+      <div>
+        <div class="labelstyling">Surface Type:</div>
+        <br/>
+        <app-checkbox class="rightPadding" *ngFor="let surfaceType of surfaceTypes" [label]="surfaceType" (toggled)="updateSQL($event)" [resetTrigger]="resetTrigger"></app-checkbox>
+      </div>
 
     </div>
     <div id="secondCol" class="rowElem">
       <div>
         <h3 id="secondColHeader">Trail Use</h3>
       </div>
-      <!-- MAKE A COMPONENT TO PRODUCE THESE -->
       <div class="flexRow paddin">
-        <div class="flexColumn paddin">
+        <div *ngFor="let useType of useTypes" class="flexColumn paddin">
           <div class="marAuto">
-            <img src="../../assets/walk-icon.png" alt="">
+            <img src="{{useType[1]}}" alt="">
           </div>
-          <div class="marAuto">Walking</div>
-          <mat-checkbox class="marAuto" type="checkbox" [checked]="isWalking" (change)="isWalking = !isWalking"></mat-checkbox>
-        </div>
-        <div class="flexColumn paddin">
-          <div class="marAuto">
-            <img src="../../assets/bike-icon.png" alt="">
-          </div>
-          <div class="marAuto">Biking</div>
-          <mat-checkbox class="marAuto" type="checkbox" [checked]="isBiking" (change)="isBiking = !isBiking"></mat-checkbox>
-        </div>
-        <div class="flexColumn paddin">
-          <div class="marAuto">
-            <img src="../../assets/skate-icon.png" alt="">
-          </div>
-          <div class="marAuto">Skating</div>
-          <mat-checkbox class="marAuto" type="checkbox" [checked]="isSkating" (change)="isSkating = !isSkating"></mat-checkbox>
-        </div>
-        <div class="flexColumn paddin">
-          <div class="marAuto">
-            <img src="../../assets/atv-icon.png" alt="">
-          </div>
-          <div class="marAuto">ATV</div>
-          <mat-checkbox class="marAuto" type="checkbox" [checked]="isATV" (change)="isATV = !isATV"></mat-checkbox>
-        </div>
-        <div class="flexColumn paddin">
-          <div class="marAuto">
-            <img src="../../assets/horse-icon.png" alt="">
-          </div>
-          <div class="marAuto">Horse</div>
-          <mat-checkbox class="marAuto" type="checkbox" [checked]="isHorse" (change)="isHorse = !isHorse"></mat-checkbox>
-        </div>
-        <div class="flexColumn paddin">
-          <div class="marAuto">
-            <img src="../../assets/ski-icon.png" alt="">
-          </div>
-          <div class="marAuto">Skiing</div>
-          <mat-checkbox class="marAuto" type="checkbox" [checked]="isSkiing" (change)="isSkiing = !isSkiing"></mat-checkbox>
-        </div>
-        <div class="flexColumn paddin">
-          <div class="marAuto">
-            <img src="../../assets/snow-mobile-icon.png" alt="">
-          </div>
-          <div class="marAuto">Snowmobile</div>
-          <mat-checkbox class="marAuto" type="checkbox" [checked]="isSnowmoblie" (change)="isSnowmoblie = !isSnowmoblie"></mat-checkbox>
+          <div class="marAuto">{{useType[0]}}</div>
+          <app-checkbox class="marAuto" [label]="useType[0]" [imgSrc]="useType[1]" (toggled)="updateSQL($event)" [resetTrigger]="resetTrigger"></app-checkbox>
         </div>
       </div>
     </div>
@@ -108,10 +58,10 @@
 
   <!-- Searching gif -->
   <div *ngIf="searching" class="flexRow">
-      <img src="../../assets/searching.gif" alt="">
+    <img src="../../assets/searching.gif" alt="">
   </div>
-  
-  
+
+
 
 </div>
 <!-- End main -->

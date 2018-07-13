@@ -1,1 +1,3 @@
-<mat-checkbox class="marAuto" type="checkbox" [checked]="isChecked" (change)="toggle()">{{label}}</mat-checkbox>
+<mat-checkbox class="marAuto" type="checkbox" [checked]="isChecked" (change)="toggle()">
+  <span *ngIf="!imgSrc">{{label}}</span>
+</mat-checkbox>
